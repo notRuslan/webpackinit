@@ -1,3 +1,3 @@
-Install 
-git clone
+Install <br>
+git clone <br>
 npm i
