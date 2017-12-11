@@ -26,21 +26,21 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            chunks: ['index','common'],
+            chunks: ['index', 'common'],
             template: PATHS.source + '/pages/index/index.pug'
         }),
         new HtmlWebpackPlugin({
             filename: 'blog.html',
-            chunks: ['blog','common'],
+            chunks: ['blog', 'common'],
             template: PATHS.source + '/pages/blog/blog.pug'
         }),
         new CleanWebpackPlugin('build'),
         new ExtractTextPlugin('./css/[name].css'),
         new webpack.optimize.CommonsChunkPlugin({
-        name: 'common'
+            name: 'common'
         }),
         new OptimizeCssAssetsPlugin(({
-            cssProcessorOptions: { postcssDiscardComments: {removeAll: true}}
+            cssProcessorOptions: {postcssDiscardComments: {removeAll: true}}
         })),
         new StyleLintPlugin({
             configFile: './.stylelintrc',
@@ -50,62 +50,62 @@ module.exports = {
             jQuery: 'jquery'
         }),
         new UglifyJSPlugin()
-],
-module: {
-    rules: [
-        {
-            test: /.\.pug$/,
-            loader: 'pug-loader',
-            options: {
-                pretty: true
-            }
-        },
-        {
-            test: /\.scss$/,
-            use: ExtractTextPlugin.extract({
-                publicPath: '../',
-                use: [
-                    {loader: 'css-loader'},
-                    {
-                        loader: 'postcss-loader',
-                        options: {
-                            plugins:  [
-                                autoprefixer({
-                                    browsers:['ie >= 8', 'last 4 version']
-                                })
-                            ]
-                        }
-                    },
-                    {loader: 'sass-loader'}
-                ],
-            }),
-        },
-        {
-            test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-                fallback: 'style-loader',
-                use: ['css-loader'],
-            }),
-        },
+    ],
+    module: {
+        rules: [
+            {
+                test: /.\.pug$/,
+                loader: 'pug-loader',
+                options: {
+                    pretty: true
+                }
+            },
+            {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    publicPath: '../',
+                    use: [
+                        {loader: 'css-loader'},
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: [
+                                    autoprefixer({
+                                        browsers: ['ie >= 8', 'last 4 version']
+                                    })
+                                ]
+                            }
+                        },
+                        {loader: 'sass-loader'}
+                    ],
+                }),
+            },
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: ['css-loader'],
+                }),
+            },
 
-        {
-            test: /\.js$/,
-            enforce: "pre",
-            loader: "eslint-loader",
-            options: {
-                fix: true
+            {
+                test: /\.js$/,
+                enforce: "pre",
+                loader: "eslint-loader",
+                options: {
+                    fix: true
+                }
+            },
+            {
+                test: /\.(jpg|png|svg)$/,
+                loader: 'file-loader',
+                options: {
+                    name: 'images/[name].[ext]'
+                }
             }
-        },
-        {
-            test: /\.(jpg|png|svg)$/,
-            loader: 'file-loader',
-            options: {
-                name: 'images/[name].[ext]'
-            }
-        }
 
 
-    ]
-}
+        ]
+    }
 }
 ;
