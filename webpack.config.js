@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 const PATHS = {
     source: path.join(__dirname, 'source'),
@@ -63,7 +64,20 @@ module: {
             test: /\.scss$/,
             use: ExtractTextPlugin.extract({
                 publicPath: '../',
-                use: ['css-loader', 'sass-loader'],
+                use: [
+                    {loader: 'css-loader'},
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins:  [
+                                autoprefixer({
+                                    browsers:['ie >= 8', 'last 4 version']
+                                })
+                            ]
+                        }
+                    },
+                    {loader: 'sass-loader'}
+                ],
             }),
         },
         {
