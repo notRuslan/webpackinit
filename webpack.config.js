@@ -17,6 +17,7 @@ module.exports = {
     entry: {
         'index': PATHS.source + '/pages/index/index.js',
         'blog': PATHS.source + '/pages/blog/blog.js',
+        'about': PATHS.source + '/pages/about/about.js',
 
     },
     output: {
@@ -35,12 +36,18 @@ module.exports = {
             template: PATHS.source + '/pages/blog/blog.pug'
         }),
         new CleanWebpackPlugin('build'),
+        new HtmlWebpackPlugin({
+            filename: 'about.html',
+            chunks: ['about', 'common'],
+            template: PATHS.source + '/pages/about/about.pug'
+        }),
+        new CleanWebpackPlugin('build'),
         new ExtractTextPlugin('./css/[name].css'),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common'
         }),
         new OptimizeCssAssetsPlugin(({
-            cssProcessorOptions: {postcssDiscardComments: {removeAll: true}}
+            cssProcessorOptions: { postcssDiscardComments: { removeAll: true } }
         })),
         new StyleLintPlugin({
             configFile: './.stylelintrc',
@@ -52,8 +59,7 @@ module.exports = {
         new UglifyJSPlugin()
     ],
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /.\.pug$/,
                 loader: 'pug-loader',
                 options: {
@@ -65,18 +71,19 @@ module.exports = {
                 use: ExtractTextPlugin.extract({
                     publicPath: '../',
                     use: [
-                        {loader: 'css-loader'},
+                        { loader: 'css-loader' },
                         {
                             loader: 'postcss-loader',
                             options: {
                                 plugins: [
                                     autoprefixer({
-                                        browsers: ['ie >= 8', 'last 4 version']
+                                        browsers: ['ie >= 12', 'last 0 version']
                                     })
                                 ]
                             }
                         },
-                        {loader: 'sass-loader'}
+                        { loader: 'sass-loader' },
+                        // { loader: 'resolve-url-loader' }
                     ],
                 }),
             },
@@ -102,10 +109,12 @@ module.exports = {
                 options: {
                     name: 'images/[name].[ext]'
                 }
+            },
+            {
+                test: /\.(woff|woff2|ttf)$/,
+                loader: 'file-loader',
+                options: { name: 'css/fonts/[name].[ext]' }
             }
-
-
         ]
     }
-}
-;
+};
